@@ -179,3 +179,24 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+# ============================
+# Big Data Project
+# ============================
+
+# Hadoop
+tmp/
+logs/
+
+# Spark
+spark-warehouse/
+
+# Trained models
+model/*.model
+model/*.pkl
+
+# VS Code
+.vscode/
+
+# OS files
+Thumbs.db
+.DS_Store
