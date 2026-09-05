@@ -1,0 +1,18 @@
+ARG HADOOP_VERSION=3.2.1
+FROM crop-recommendation-hadoop:${HADOOP_VERSION}
+
+USER root
+ARG HIVE_VERSION=3.1.3
+ENV HIVE_HOME=/opt/hive \
+    HIVE_CONF_DIR=/opt/hive/conf \
+    PATH=/opt/hive/bin:$PATH
+
+RUN curl -fsSL "https://archive.apache.org/dist/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz" -o /tmp/hive.tgz \
+    && tar -xzf /tmp/hive.tgz -C /opt \
+    && ln -s "/opt/apache-hive-${HIVE_VERSION}-bin" /opt/hive \
+    && rm /tmp/hive.tgz \
+    && curl -fsSL "https://jdbc.postgresql.org/download/postgresql-42.7.3.jar" -o /opt/hive/lib/postgresql-42.7.3.jar \
+    && mkdir -p /opt/hive/logs \
+    && chown -R hadoop:hadoop /opt/apache-hive-${HIVE_VERSION}-bin
+
+USER hadoop

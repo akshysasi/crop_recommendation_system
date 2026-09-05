@@ -1,0 +1,27 @@
+FROM eclipse-temurin:8-jre-jammy
+
+ARG HADOOP_VERSION=3.2.1
+ENV HADOOP_HOME=/opt/hadoop \
+    HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop \
+    HADOOP_COMMON_HOME=/opt/hadoop \
+    HADOOP_HDFS_HOME=/opt/hadoop \
+    HADOOP_MAPRED_HOME=/opt/hadoop \
+    HADOOP_YARN_HOME=/opt/hadoop \
+    HADOOP_COMMON_LIB_NATIVE_DIR=/opt/hadoop/lib/native \
+    HADOOP_OPTS=-Djava.library.path=/opt/hadoop/lib/native \
+    PATH=/opt/hadoop/bin:/opt/hadoop/sbin:$PATH
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends bash curl netcat-openbsd procps tini \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -fsSL "https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" -o /tmp/hadoop.tgz \
+    && tar -xzf /tmp/hadoop.tgz -C /opt \
+    && ln -s "/opt/hadoop-${HADOOP_VERSION}" /opt/hadoop \
+    && rm /tmp/hadoop.tgz \
+    && useradd --system --create-home --uid 1000 hadoop \
+    && mkdir -p /data/dfs/name /data/dfs/data /opt/hadoop/logs \
+    && chown -R hadoop:hadoop /data /opt/hadoop-${HADOOP_VERSION}
+
+USER hadoop
+WORKDIR /home/hadoop
+ENTRYPOINT ["/usr/bin/tini", "--"]
