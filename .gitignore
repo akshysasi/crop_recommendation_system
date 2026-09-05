@@ -200,3 +200,34 @@ model/*.pkl
 # OS files
 Thumbs.db
 .DS_Store
+# ============================
+# Big Data Project
+# ============================
+
+# Docker bind mounts / caches
+hadoop-hive-spark-docker/jupyter/.cache/
+hadoop-hive-spark-docker/jupyter/notebook/.ipynb_checkpoints/
+
+# Python virtual environment
+backend/venv/
+
+# Environment variables
+backend/.env
+
+# Spark local files
+spark-warehouse/
+metastore_db/
+
+# Hadoop temporary files
+*.pid
+*.out
+# IDEs
+.idea/
+.vscode/
+
+# Local database
+*.db
+
+# macOS / Windows
+Thumbs.db
+Desktop.ini
