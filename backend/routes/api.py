@@ -1,4 +1,5 @@
 from flask import Blueprint
+from services.weather_service import get_weather
 
 api = Blueprint("api", __name__)
 
@@ -18,3 +19,6 @@ def version():
         "backend": "Flask",
         "version": "1.0.0"
     }
+@api.route("/weather/<location>", methods=["GET"])
+def weather(location):
+    return get_weather(location)
