@@ -1,13 +1,17 @@
 from flask import Flask
+from routes.api import api
 
 app = Flask(__name__)
+
+# Register API routes
+app.register_blueprint(api, url_prefix="/api")
 
 
 @app.route("/")
 def home():
     return {
-        "message": "Crop Recommendation Backend is Running 🚀",
-        "status": "success"
+        "message": "Crop Recommendation System Backend",
+        "status": "running"
     }
 
 
