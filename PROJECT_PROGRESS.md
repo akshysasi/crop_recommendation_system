@@ -124,27 +124,57 @@ Response:
 
 ---
 
-## Next Milestone
+---
 
-### 🔄 Environment Service
+### ✅ Milestone 5 - Environment Service
+**Status:** Completed
 
-Planned Features
-- Combine Weather and Soil Services
-- Accept GPS coordinates
-- Return complete environmental data
-- Prepare data for ML model integration
+#### Completed
+- Refactored backend service architecture
+- Standardized service naming convention
+- Created `environment_service.py`
+- Created `soil_service.py` with placeholder soil values
+- Refactored `weather_service.py` to work with latitude and longitude
+- Implemented a unified Environment Service
+- Added `/api/environment` endpoint
+- Successfully combined weather and soil data into a single JSON response
+- Validated latitude and longitude query parameters
+- Tested the endpoint successfully
 
-Target Response
+#### API Endpoint
 
+GET /api/environment?lat=<latitude>&lon=<longitude>
+
+Example:
+
+GET /api/environment?lat=10.5270&lon=76.2146
+
+Response:
+
+```json
 {
-    "temperature": ...,
-    "humidity": ...,
-    "rainfall": ...,
-    "nitrogen": ...,
-    "phosphorus": ...,
-    "potassium": ...,
-    "ph": ...
+    "location": {
+        "latitude": 10.5270,
+        "longitude": 76.2146
+    },
+    "weather": {
+        "temperature": 29.8,
+        "humidity": 71,
+        "rainfall": 0.2
+    },
+    "soil": {
+        "nitrogen": 42,
+        "phosphorus": 18,
+        "potassium": 31,
+        "ph": 6.6
+    }
 }
+```
+
+#### Challenges Solved
+- Fixed `ModuleNotFoundError` caused by an incorrectly named file (`enviornment_services.py`)
+- Improved backend architecture by separating responsibilities into dedicated service modules
+- Established a clean service layer for future Hive, Spark, and ML integration
 
 ---
 
@@ -187,7 +217,13 @@ Spark Master: ✅ Running
 
 Weather API: ✅ Working
 
-Environment Service: 🔄 In Progress
+Environment API: ✅ Working
+
+Environment Service: ✅ Completed
+
+Soil Service (Placeholder): ✅ Completed
+
+Hive Data Integration: 🔄 Next Milestone
 
 Machine Learning Integration: ⏳ Pending
 
