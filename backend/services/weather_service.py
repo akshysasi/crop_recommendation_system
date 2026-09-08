@@ -1,24 +1,11 @@
-from geopy.geocoders import Nominatim
-import requests
+from requests import get
 
 
-def get_weather(location):
+def get_weather(latitude, longitude):
     """
-    Fetch current weather data for a given location.
-    Returns temperature, humidity and rainfall.
+    Fetch weather using latitude and longitude.
     """
 
-    # Convert location name to latitude and longitude
-    geolocator = Nominatim(user_agent="crop_recommendation_system")
-    place = geolocator.geocode(location)
-
-    if place is None:
-        return {"error": "Location not found"}
-
-    latitude = place.latitude
-    longitude = place.longitude
-
-    # Open-Meteo API
     url = (
         "https://api.open-meteo.com/v1/forecast"
         f"?latitude={latitude}"
@@ -28,7 +15,7 @@ def get_weather(location):
         "&timezone=auto"
     )
 
-    response = requests.get(url)
+    response = get(url)
 
     if response.status_code != 200:
         return {"error": "Unable to fetch weather"}
@@ -36,9 +23,6 @@ def get_weather(location):
     data = response.json()
 
     return {
-        "location": location,
-        "latitude": latitude,
-        "longitude": longitude,
         "temperature": data["current"]["temperature_2m"],
         "humidity": data["current"]["relative_humidity_2m"],
         "rainfall": data["daily"]["rain_sum"][0]
