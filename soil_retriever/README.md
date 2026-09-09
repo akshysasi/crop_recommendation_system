@@ -1,0 +1,1 @@
+we are building a soil data retriver to make this project a bit more professional so we dont want to input vaues induvidually.
