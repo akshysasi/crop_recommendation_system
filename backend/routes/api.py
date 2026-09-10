@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from services.weather_service import get_weather
 from services.environment_service import get_environment
+from services.prediction_service import predict_crop
 
 api = Blueprint("api", __name__)
 
@@ -41,3 +42,33 @@ def environment():
         }, 400
 
     return get_environment(latitude, longitude)
+@api.route("/predict", methods=["POST"])
+def predict():
+
+    data = request.get_json()
+
+    required_fields = [
+        "nitrogen",
+        "phosphorus",
+        "potassium",
+        "temperature",
+        "humidity",
+        "ph",
+        "rainfall"
+    ]
+
+    for field in required_fields:
+        if field not in data:
+            return {
+                "error": f"Missing field: {field}"
+            }, 400
+
+    return predict_crop(
+        data["nitrogen"],
+        data["phosphorus"],
+        data["potassium"],
+        data["temperature"],
+        data["humidity"],
+        data["ph"],
+        data["rainfall"]
+    )
