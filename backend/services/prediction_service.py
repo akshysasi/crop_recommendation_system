@@ -37,10 +37,31 @@ def predict_crop(nitrogen, phosphorus, potassium,
     # Convert numeric prediction back to crop name
     crop = label_encoder.inverse_transform(prediction)[0]
 
-    # Save prediction to CSV
+    # Make sure the data folder exists
+    os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
+
+    # Check if the CSV file already exists
+    file_exists = os.path.exists(DATA_PATH)
+
+    # Save prediction
     with open(DATA_PATH, "a", newline="") as file:
         writer = csv.writer(file)
 
+        # Write header only once
+        if not file_exists:
+            writer.writerow([
+                "timestamp",
+                "nitrogen",
+                "phosphorus",
+                "potassium",
+                "temperature",
+                "humidity",
+                "ph",
+                "rainfall",
+                "predicted_crop"
+            ])
+
+        # Write prediction row
         writer.writerow([
             datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             nitrogen,
