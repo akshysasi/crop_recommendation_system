@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from services.weather_service import get_weather
 from services.environment_service import get_environment
 from services.prediction_service import predict_crop
+from services.spark_service import get_prediction_statistics
 
 api = Blueprint("api", __name__)
 
@@ -14,6 +15,9 @@ def health():
         "version": "1.0.0"
     }
 
+@api.route("/analytics", methods=["GET"])
+def analytics():
+    return get_prediction_statistics()
 
 @api.route("/version", methods=["GET"])
 def version():
