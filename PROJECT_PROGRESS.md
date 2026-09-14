@@ -1,230 +1,214 @@
-# Crop Recommendation System Progress
+# 🌾 AI-Powered Crop Recommendation System
+## Project Progress Tracker
 
-## Phase 1 ✅ Completed
-
-- Installed Docker Desktop
-- Configured WSL2
-- Started Hadoop Cluster
-- Verified HDFS
-- Uploaded Crop_recommendation.csv to HDFS
-- Created GitHub Repository
-- Organized Project Structure
-
-## Current Status
-
-- Hadoop ✅
-- HDFS ✅
-- Hive ⏳
-- Spark ⏳
-- ML ⏳
-- Streamlit ⏳
-
-upadation from 07-09-2026
-# Crop Recommendation System - Project Progress
-
-## Project Overview
-A Big Data-based Crop Recommendation System that integrates Hadoop, Hive, Spark, Flask, and Machine Learning to provide crop recommendations using environmental data.
+**Last Updated:** 14 September 2026
 
 ---
 
-## Completed Milestones
+# Overall Progress
 
-### ✅ Milestone 1 - Project Setup
-**Status:** Completed
-
-#### Completed
-- Created GitHub repository
-- Organized project directory structure
-- Configured `.gitignore`
-- Created Python virtual environment
-- Installed Flask and project dependencies
-- Generated `requirements.txt`
+**Project Completion:** **~92%**
 
 ---
 
-### ✅ Milestone 2 - Big Data Infrastructure
-**Status:** Completed
+# ✅ Completed
 
-#### Completed
-- Configured Docker Compose cluster
-- Built custom Hadoop, Hive, and Spark Docker images
-- Fixed Windows CRLF entrypoint issue
-- Resolved Docker port conflicts
-- Configured container networking
-- Started Hadoop NameNode and ResourceManager
-- Started two Hadoop DataNodes
-- Initialized Hive Metastore with PostgreSQL
-- Started Spark Master successfully
-
-#### Issues Solved
-- Missing Docker entrypoint script
-- Windows line-ending (CRLF) compatibility
-- Port 9870 already in use
-- Hostname resolution (`master`)
-- Hive metastore schema initialization
+## Phase 1 – Project Setup
+- [x] Repository created
+- [x] Git initialized
+- [x] Virtual environment configured
+- [x] Project folder structure created
 
 ---
 
-### ✅ Milestone 3 - Flask Backend
-**Status:** Completed
+## Phase 2 – Dataset & Machine Learning
 
-#### Completed
-- Created Flask backend
-- Modular project structure
-- Blueprint-based routing
-- Service layer architecture
-- Root endpoint (`/`)
-- Health endpoint (`/api/health`)
-- Version endpoint (`/api/version`)
+### Data Preparation
+- [x] Dataset imported
+- [x] Removed unnecessary columns
+- [x] Renamed dataset columns
+- [x] Checked data types
+- [x] Checked null values
+- [x] Verified duplicate records
+- [x] Exploratory Data Analysis (EDA)
 
-#### Backend Structure
-
-backend/
-├── app.py
-├── config.py
-├── routes/
-├── services/
-├── templates/
-└── static/
-
----
-
-### ✅ Milestone 4 - Live Weather Integration
-**Status:** Completed
-
-#### Completed
-- Installed Geopy
-- Implemented Weather Service
-- Integrated Open-Meteo API
-- Converted city names to coordinates
-- Retrieved live:
-  - Temperature
-  - Humidity
-  - Rainfall
-- Added Weather API endpoint
-
-#### Working Endpoint
-
-GET /api/weather/<location>
-
-Example:
-
-GET /api/weather/Thrissur
-
-Response:
-
-{
-    "location": "Thrissur",
-    "latitude": 10.5270099,
-    "longitude": 76.214621,
-    "temperature": 29.8,
-    "humidity": 71,
-    "rainfall": 0.2
-}
+### Model Training
+- [x] Label Encoding
+- [x] Feature Selection
+- [x] Train-Test Split
+- [x] Compared multiple ML algorithms
+- [x] Selected Gaussian Naive Bayes
+- [x] Trained final model
+- [x] Saved trained model (.pkl)
+- [x] Saved Label Encoder (.pkl)
 
 ---
 
----
+## Phase 3 – Backend Development
 
-### ✅ Milestone 5 - Environment Service
-**Status:** Completed
-
-#### Completed
-- Refactored backend service architecture
-- Standardized service naming convention
-- Created `environment_service.py`
-- Created `soil_service.py` with placeholder soil values
-- Refactored `weather_service.py` to work with latitude and longitude
-- Implemented a unified Environment Service
-- Added `/api/environment` endpoint
-- Successfully combined weather and soil data into a single JSON response
-- Validated latitude and longitude query parameters
-- Tested the endpoint successfully
-
-#### API Endpoint
-
-GET /api/environment?lat=<latitude>&lon=<longitude>
-
-Example:
-
-GET /api/environment?lat=10.5270&lon=76.2146
-
-Response:
-
-```json
-{
-    "location": {
-        "latitude": 10.5270,
-        "longitude": 76.2146
-    },
-    "weather": {
-        "temperature": 29.8,
-        "humidity": 71,
-        "rainfall": 0.2
-    },
-    "soil": {
-        "nitrogen": 42,
-        "phosphorus": 18,
-        "potassium": 31,
-        "ph": 6.6
-    }
-}
-```
-
-#### Challenges Solved
-- Fixed `ModuleNotFoundError` caused by an incorrectly named file (`enviornment_services.py`)
-- Improved backend architecture by separating responsibilities into dedicated service modules
-- Established a clean service layer for future Hive, Spark, and ML integration
+- [x] Flask application created
+- [x] REST API implemented
+- [x] Prediction endpoint created
+- [x] Model integrated into backend
+- [x] CORS configured
+- [x] Prediction service completed
 
 ---
 
-## Current Tech Stack
+## Phase 4 – Frontend Development
 
-### Backend
-- Python
-- Flask
-
-### Big Data
-- Hadoop
-- HDFS
-- Hive
-- Spark
-
-### Database
-- PostgreSQL (Hive Metastore)
-
-### APIs
-- Open-Meteo
-- Geopy (Nominatim)
-
-### Version Control
-- Git
-- GitHub
+- [x] HTML interface
+- [x] CSS styling
+- [x] JavaScript integration
+- [x] Connected frontend with Flask API
+- [x] End-to-end prediction working
 
 ---
 
-## Current Status
+## Phase 5 – Prediction History
 
-Backend: ✅ Working
+- [x] Prediction logging implemented
+- [x] Automatic CSV creation
+- [x] Automatic CSV header generation
+- [x] Prediction history stored successfully
 
-Docker Cluster: ✅ Running
+---
 
-Hadoop: ✅ Running
+## Phase 6 – Apache Spark Integration
 
-Hive: ✅ Running
+- [x] PySpark installed
+- [x] Java configured
+- [x] Spark compatibility issues resolved
+- [x] Spark analytics service created
+- [x] Analytics API endpoint implemented
+- [x] Crop distribution analytics added
 
-Spark Master: ✅ Running
+### Current Analytics
 
-Weather API: ✅ Working
+- [x] Total Predictions
+- [x] Most Recommended Crop
+- [x] Recommendation Count
+- [x] Average Temperature
+- [x] Average Rainfall
+- [x] Crop Distribution
 
-Environment API: ✅ Working
+---
 
-Environment Service: ✅ Completed
+## Phase 7 – Documentation
 
-Soil Service (Placeholder): ✅ Completed
+- [x] README updated
+- [x] Git commits maintained throughout development
+- [x] Project structure documented
 
-Hive Data Integration: 🔄 Next Milestone
+---
 
-Machine Learning Integration: ⏳ Pending
+# 🚧 In Progress
 
-Frontend Integration: ⏳ Pending
+## Apache Hive Integration
+
+Status: **Paused**
+
+Current findings:
+
+- Docker Desktop installed and working.
+- Existing Hadoop/Hive Docker cluster detected.
+- Project also contains its own Docker-based Hadoop/Hive setup.
+- Docker port conflict on PostgreSQL (5432).
+- HiveServer2 in the old stack is not starting correctly.
+- Decision made to pause and complete Hive setup in a dedicated session.
+
+---
+
+# ⏳ Remaining Work
+
+## Big Data
+
+- [ ] Finalize Hadoop/Hive Docker environment
+- [ ] Start Hive Metastore
+- [ ] Start HiveServer2
+- [ ] Import `prediction_history.csv`
+- [ ] Create Hive database
+- [ ] Create Hive table
+- [ ] Execute Hive SQL queries
+- [ ] (Optional) Integrate Hive queries with Flask
+
+---
+
+## Frontend Improvements
+
+- [ ] Improve UI styling
+- [ ] Add loading indicator
+- [ ] Improve result display
+- [ ] Input validation
+- [ ] Optional analytics dashboard
+
+---
+
+## Documentation
+
+- [ ] Final architecture diagram
+- [ ] Installation guide
+- [ ] Screenshots
+- [ ] Demo guide
+- [ ] Viva preparation
+
+---
+
+## Deployment
+
+- [ ] Dockerize Flask backend (optional)
+- [ ] Final deployment/testing
+
+---
+
+# Git Milestones
+
+- ✅ Project initialization
+- ✅ Dataset cleaning
+- ✅ Model training
+- ✅ Model serialization
+- ✅ Flask backend
+- ✅ Prediction API
+- ✅ Frontend integration
+- ✅ Prediction history logging
+- ✅ PySpark compatibility fix
+- ✅ Apache Spark analytics
+- ✅ Crop distribution analytics
+- ✅ README update
+
+---
+
+# Next Session Plan
+
+1. Review the existing Docker Hadoop/Hive environments.
+2. Remove or isolate conflicting Docker stacks.
+3. Bring up the project's Hadoop/Hive Docker stack.
+4. Verify Hive Metastore and HiveServer2.
+5. Import `prediction_history.csv` into Hive.
+6. Run Hive SQL analytics.
+7. Complete the Big Data integration.
+
+---
+
+# Current Status
+
+| Component | Status |
+|----------|--------|
+| Machine Learning | ✅ Complete |
+| Flask Backend | ✅ Complete |
+| Frontend | ✅ Complete |
+| Prediction API | ✅ Complete |
+| Prediction Logging | ✅ Complete |
+| Apache Spark | ✅ Complete |
+| Spark Analytics | ✅ Complete |
+| Apache Hive | 🚧 In Progress |
+| Documentation | 🟡 Mostly Complete |
+| Deployment | ⏳ Pending |
+
+---
+
+## 🎯 Overall Progress
+
+**≈ 92% Complete**
+
+The application is fully functional with machine learning predictions, historical logging, and Apache Spark analytics. The remaining major task is completing the Apache Hive integration and applying final project polish.
