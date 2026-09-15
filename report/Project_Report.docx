@@ -66,3 +66,25 @@ The Crop Recommendation System follows a three-layer architecture consisting of 
 The Presentation Layer provides a web interface where users enter soil and environmental parameters.
 The Application Layer is implemented using Flask. It receives user input, validates the data, sends it to the trained machine learning model, and returns the predicted crop.
 The Data Processing Layer consists of the trained Gaussian Naive Bayes model, prediction history storage, and Apache Spark analytics. Each prediction is stored in a CSV file, which is later analyzed using Apache Spark to generate statistical insights. Apache Hive integration is planned to provide SQL-based querying over prediction history.
+8. System Workflow
+8. System Workflow
+The workflow of the proposed system consists of the following steps:
+1. The user enters soil nutrient and weather parameters through the web interface.
+2. The frontend sends the input data to the Flask backend using a REST API.
+3. The backend preprocesses the input and passes it to the trained machine learning model.
+4. The model predicts the most suitable crop.
+5. The predicted crop is displayed to the user.
+6. The prediction is stored in the prediction history CSV file.
+7. Apache Spark reads the prediction history and generates analytical statistics.
+8. Apache Hive (under integration) will provide SQL-based querying and reporting on the stored prediction history.
+9. Machine Learning Methodology
+9. Machine Learning Methodology
+Several supervised machine learning algorithms were evaluated to determine the most suitable model for crop prediction.
+The following algorithms were compared:
+- Logistic Regression
+- Decision Tree
+- Random Forest
+- K-Nearest Neighbors (KNN)
+- Gaussian Naive Bayes
+The models were trained using an 80:20 train-test split and evaluated based on prediction accuracy.
+Among the evaluated models, Gaussian Naive Bayes achieved the highest performance while providing fast prediction speed and low computational complexity. Therefore, it was selected as the final model and exported using the Joblib library for deployment within the Flask application.
