@@ -61,3 +61,8 @@ Rainfall	Rainfall received (mm)
 
 The target variable is the crop that is most suitable for cultivation under the given conditions.
 Before training, the dataset was examined for missing values, duplicate records, and inconsistent data types. The feature names were standardized and the target labels were encoded into numerical values for machine learning.
+7. System Architecture
+The Crop Recommendation System follows a three-layer architecture consisting of the presentation layer, application layer, and data processing layer.
+The Presentation Layer provides a web interface where users enter soil and environmental parameters.
+The Application Layer is implemented using Flask. It receives user input, validates the data, sends it to the trained machine learning model, and returns the predicted crop.
+The Data Processing Layer consists of the trained Gaussian Naive Bayes model, prediction history storage, and Apache Spark analytics. Each prediction is stored in a CSV file, which is later analyzed using Apache Spark to generate statistical insights. Apache Hive integration is planned to provide SQL-based querying over prediction history.
