@@ -119,3 +119,18 @@ Apache Spark successfully analyzed the stored prediction history and generated u
 - Average temperature
 - Average rainfall
 The integration of machine learning and big data technologies demonstrates the effectiveness of combining predictive analytics with historical data analysis.
+13. Future Enhancements
+13. Future Enhancements
+The following enhancements can be implemented in future versions of the project:
+- Integration of real-time weather APIs.
+- Automatic soil parameter retrieval using IoT sensors.
+- Mobile application support.
+- Multiple language support for farmers.
+- Cloud deployment for remote accessibility.
+- Visualization dashboards using Power BI or Tableau.
+- Integration with Apache Hive for large-scale historical data analysis.
+- Support for fertilizer recommendation and crop yield prediction.
+14. Conclusion
+14. Conclusion
+The AI-Powered Crop Recommendation System demonstrates how Artificial Intelligence and Big Data technologies can be applied to solve real-world agricultural problems. By analyzing soil nutrients and environmental conditions, the system provides accurate crop recommendations through a user-friendly web interface.
+The integration of Flask, Machine Learning, Apache Spark, and planned Apache Hive support creates a scalable architecture capable of handling prediction and analytical tasks efficiently. The project highlights the practical application of AI techniques in precision agriculture and provides a strong foundation for future enhancements involving cloud computing, IoT, and advanced analytics.
