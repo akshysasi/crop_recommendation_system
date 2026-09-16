@@ -134,3 +134,15 @@ The following enhancements can be implemented in future versions of the project:
 14. Conclusion
 The AI-Powered Crop Recommendation System demonstrates how Artificial Intelligence and Big Data technologies can be applied to solve real-world agricultural problems. By analyzing soil nutrients and environmental conditions, the system provides accurate crop recommendations through a user-friendly web interface.
 The integration of Flask, Machine Learning, Apache Spark, and planned Apache Hive support creates a scalable architecture capable of handling prediction and analytical tasks efficiently. The project highlights the practical application of AI techniques in precision agriculture and provides a strong foundation for future enhancements involving cloud computing, IoT, and advanced analytics.
+15. References
+Use references such as:
+1. Han, J., Kamber, M., & Pei, J. Data Mining: Concepts and Techniques.
+2. Ian H. Witten, Eibe Frank, Mark A. Hall. Data Mining: Practical Machine Learning Tools and Techniques.
+3. Scikit-learn Documentation.
+4. Flask Documentation.
+5. Apache Spark Documentation.
+6. Apache Hive Documentation.
+7. Python Official Documentation.
+8. Pandas Documentation.
+9. NumPy Documentation.
+10. GitHub Documentation.
