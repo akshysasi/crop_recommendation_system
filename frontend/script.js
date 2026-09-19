@@ -66,6 +66,7 @@ inputs.forEach((input, index) => {
 
             if (index < inputs.length - 1) {
                 inputs[index + 1].focus();
+                inputs[index + 1].select();   // Highlight next value
             } else {
                 predictCrop();
             }
@@ -79,6 +80,7 @@ inputs.forEach((input, index) => {
 
             if (index < inputs.length - 1) {
                 inputs[index + 1].focus();
+                inputs[index + 1].select();
             }
 
         }
@@ -90,6 +92,7 @@ inputs.forEach((input, index) => {
 
             if (index > 0) {
                 inputs[index - 1].focus();
+                inputs[index - 1].select();
             }
 
         }
@@ -98,11 +101,12 @@ inputs.forEach((input, index) => {
 
 });
 
-
 // ======================================
 // Auto Focus First Field
 // ======================================
 
 window.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("nitrogen").focus();
+    const firstInput = document.getElementById("nitrogen");
+    firstInput.focus();
+    firstInput.select();
 });
