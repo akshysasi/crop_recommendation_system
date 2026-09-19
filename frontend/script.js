@@ -33,7 +33,7 @@ async function predictCrop() {
 
         const data = await response.json();
 
-         console.log(data);
+        console.log(data);
 
         document.getElementById("result").innerHTML =
             `🌾 Recommended Crop:<br><h2>${data.recommended_crop}</h2>`;
@@ -45,4 +45,64 @@ async function predictCrop() {
         document.getElementById("result").innerHTML =
             `<span style="color:red;">${error.message}</span>`;
     }
+
 }
+
+
+// ======================================
+// Keyboard Navigation
+// ======================================
+
+const inputs = document.querySelectorAll(".form input");
+
+inputs.forEach((input, index) => {
+
+    input.addEventListener("keydown", function (e) {
+
+        // Press Enter → Move to next field
+        if (e.key === "Enter") {
+
+            e.preventDefault();
+
+            if (index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            } else {
+                predictCrop();
+            }
+
+        }
+
+        // Down Arrow → Next field
+        if (e.key === "ArrowDown") {
+
+            e.preventDefault();
+
+            if (index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+
+        }
+
+        // Up Arrow → Previous field
+        if (e.key === "ArrowUp") {
+
+            e.preventDefault();
+
+            if (index > 0) {
+                inputs[index - 1].focus();
+            }
+
+        }
+
+    });
+
+});
+
+
+// ======================================
+// Auto Focus First Field
+// ======================================
+
+window.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("nitrogen").focus();
+});
