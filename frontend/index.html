@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Crop Recommendation System</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -14,33 +18,46 @@
 
         <h1>🌾 Crop Recommendation System</h1>
 
+        <p class="subtitle">
+            Enter the soil and weather parameters below to receive the best crop recommendation.
+        </p>
+
         <div class="form">
 
-            <input type="number" id="nitrogen" placeholder="Nitrogen">
+            <input type="number" id="nitrogen" placeholder="Nitrogen (N)">
 
-            <input type="number" id="phosphorus" placeholder="Phosphorus">
+            <input type="number" id="phosphorus" placeholder="Phosphorus (P)">
 
-            <input type="number" id="potassium" placeholder="Potassium">
+            <input type="number" id="potassium" placeholder="Potassium (K)">
 
-            <input type="number" id="temperature" placeholder="Temperature">
+            <input type="number" id="temperature" placeholder="Temperature (°C)">
 
-            <input type="number" id="humidity" placeholder="Humidity">
+            <input type="number" id="humidity" placeholder="Humidity (%)">
 
-            <input type="number" id="ph" placeholder="pH">
+            <input type="number" id="ph" placeholder="pH Value">
 
-            <input type="number" id="rainfall" placeholder="Rainfall">
+            <input type="number" id="rainfall" placeholder="Rainfall (mm)">
 
-            <button onclick="predictCrop()">
-                Predict Crop
+            <button id="predictBtn" onclick="predictCrop()">
+                🌾 Predict Crop
+            </button>
+
+            <button id="clearBtn" type="button">
+                🔄 Clear
             </button>
 
         </div>
 
-        <div id="result"></div>
+        <div id="result">
+            <p class="result-placeholder">
+                Your crop recommendation will appear here.
+            </p>
+        </div>
 
     </div>
 
     <script src="script.js"></script>
 
 </body>
+
 </html>
