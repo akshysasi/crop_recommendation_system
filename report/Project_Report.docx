@@ -160,3 +160,14 @@ Automatic Input Focus:
 When the application loads, the cursor is automatically placed in the Nitrogen input field. As users move between fields, existing values are automatically selected, allowing them to be replaced quickly without manually deleting previous entries.
 Loading Animation:
 A dynamic loading animation was implemented for the Predict Crop button. During prediction, the button is temporarily disabled and displays an animated "Predicting..." message. This provides immediate visual feedback and prevents multiple prediction requests from being submitted simultaneously.
+Input Validation:
+Client-side validation was introduced to ensure accurate data entry before sending requests to the backend. The system validates:
+- Completion of all required input fields.
+- Acceptance of only valid numerical values.
+- Prevention of negative values where inappropriate.
+- Validation of pH values within the range of 0–14.
+- Validation of humidity values within the range of 0–100%.
+Invalid input fields are highlighted using a red border, and informative error messages are displayed to guide the user.
+Enhanced Prediction Display:
+Instead of displaying plain text, prediction results are presented inside a modern animated result card. The result card includes a success indicator and prominently displays the recommended crop, improving readability and providing a more engaging user experience.
+These enhancements collectively improve data entry efficiency, provide immediate visual feedback, reduce user errors, and create a more interactive and professional application suitable for real-world usage and project demonstration.
