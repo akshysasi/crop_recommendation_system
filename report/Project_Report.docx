@@ -152,3 +152,11 @@ The application follows a card-based layout with a centered responsive design th
 Interactive styling was incorporated throughout the interface. Input fields highlight when selected, buttons respond with hover effects, and prediction results are displayed using an animated result card. These visual enhancements improve user interaction while maintaining a clean and organized layout.
 The interface also includes a dedicated Clear button that resets all input fields, removes previous validation messages, clears prediction results, and automatically focuses on the first input field, allowing users to perform multiple predictions conveniently.
 Overall, the user interface was designed to provide an intuitive, responsive, and visually appealing environment for crop recommendation.
+4.7 User Experience Enhancements
+Several user experience enhancements were implemented to improve the efficiency and usability of the Crop Recommendation System.
+Keyboard Navigation:
+Users can navigate through the input fields using the Enter key, which automatically moves the cursor to the next field. The Up and Down Arrow keys allow navigation between previous and next fields. Pressing Enter on the final input field automatically initiates crop prediction, minimizing the need for mouse interaction.
+Automatic Input Focus:
+When the application loads, the cursor is automatically placed in the Nitrogen input field. As users move between fields, existing values are automatically selected, allowing them to be replaced quickly without manually deleting previous entries.
+Loading Animation:
+A dynamic loading animation was implemented for the Predict Crop button. During prediction, the button is temporarily disabled and displays an animated "Predicting..." message. This provides immediate visual feedback and prevents multiple prediction requests from being submitted simultaneously.
