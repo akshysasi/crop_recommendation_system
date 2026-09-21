@@ -146,3 +146,9 @@ Use references such as:
 8. Pandas Documentation.
 9. NumPy Documentation.
 10. GitHub Documentation.
+4.6 User Interface Design
+The frontend of the Crop Recommendation System was designed with a focus on simplicity, responsiveness, and ease of use. A clean and intuitive interface enables users to enter soil and weather parameters efficiently while providing clear visual feedback throughout the prediction process.
+The application follows a card-based layout with a centered responsive design that adapts to different screen sizes. Input fields are clearly labeled with their respective units, allowing users to understand the required parameters easily. Consistent spacing, typography, and color schemes were used to improve readability and provide a professional appearance.
+Interactive styling was incorporated throughout the interface. Input fields highlight when selected, buttons respond with hover effects, and prediction results are displayed using an animated result card. These visual enhancements improve user interaction while maintaining a clean and organized layout.
+The interface also includes a dedicated Clear button that resets all input fields, removes previous validation messages, clears prediction results, and automatically focuses on the first input field, allowing users to perform multiple predictions conveniently.
+Overall, the user interface was designed to provide an intuitive, responsive, and visually appealing environment for crop recommendation.
