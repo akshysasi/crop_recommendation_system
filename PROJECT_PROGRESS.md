@@ -212,3 +212,29 @@ Current findings:
 **≈ 92% Complete**
 
 The application is fully functional with machine learning predictions, historical logging, and Apache Spark analytics. The remaining major task is completing the Apache Hive integration and applying final project polish.
+
+## 2026-10-02 — Big Data Stack Verification & Spark Troubleshooting
+
+- Completed and verified the Dockerized Big Data environment:
+  - Hadoop HDFS — NameNode and DataNode
+  - YARN — ResourceManager and NodeManager
+  - Hive — Hive Metastore and HiveServer2
+  - PostgreSQL — Hive metadata database
+  - Spark — Master and Worker
+- Verified HDFS:
+  - 1 live DataNode
+  - 0 missing blocks
+  - 0 corrupt blocks
+  - 0 under-replicated blocks
+  - `/crop_recommendation_system/input` and `/crop_recommendation_system/output` directories available.
+- Verified YARN with 1 running NodeManager.
+- Verified HiveServer2 by successfully executing `SHOW DATABASES`.
+- Investigated a SparkPi job that was taking abnormally long. Logs showed the Spark Worker losing its heartbeat, being removed by the Master, and subsequently re-registering.
+- Restarted only the project's `spark-master` and `spark-worker` containers.
+- Verified the Worker re-registered successfully and returned to an `ALIVE` state.
+- Re-ran SparkPi successfully:
+  - Exit code: `0`
+  - Result: `Pi is roughly 3.1422551422551424`
+- No project files were changed during the Spark troubleshooting.
+- No Docker volumes or unrelated Docker stacks were touched.
+- Git working tree remains clean and up to date.
