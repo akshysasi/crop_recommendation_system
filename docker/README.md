@@ -6,7 +6,7 @@ This Compose stack runs a single-node Hadoop 3.2.1 cluster with HDFS and YARN, H
 
 - Docker Desktop with Compose v2 enabled.
 - At least 6 GB of Docker memory and 4 CPU cores allocated.
-- Ports `5432`, `8020`, `7077`, `8080`, `8081`, `8088`, `9870`, `9864`, `9083`, `10000`, and `10002` available on the host.
+- Ports `15432`, `18020`, `17077`, `18082`, `18081`, `18088`, `19870`, `19864`, `19083`, `11000`, `11002`, and `18042` available on the host.
 
 ## Start the stack
 
@@ -22,13 +22,13 @@ The NameNode and DataNode data plus PostgreSQL data are persisted in named Docke
 
 | Service | Address |
 | --- | --- |
-| HDFS NameNode | http://localhost:9870 |
-| YARN ResourceManager | http://localhost:8088 |
-| Spark Master | http://localhost:8080 |
-| Spark Worker | http://localhost:8081 |
-| HiveServer2 JDBC | `jdbc:hive2://localhost:10000/default` |
-| HiveServer2 web UI | http://localhost:10002 |
-| Hive Metastore | `thrift://localhost:9083` |
+| HDFS NameNode | http://localhost:19870 |
+| YARN ResourceManager | http://localhost:18088 |
+| Spark Master | http://localhost:18082 |
+| Spark Worker | http://localhost:18081 |
+| HiveServer2 JDBC | `jdbc:hive2://localhost:11000/default` |
+| HiveServer2 web UI | http://localhost:11002 |
+| Hive Metastore | `thrift://localhost:19083` |
 
 ## HDFS workflow compatibility
 
@@ -41,7 +41,7 @@ The `hdfs-bootstrap` service creates these paths during the first successful sta
 /crop_recommendation_system/output
 ```
 
-Use `hdfs://namenode:8020` from services in this Compose network. From a host process, use WebHDFS through port `9870`, or run the HDFS client in the NameNode container. For an existing workflow, upload source data into the existing project path:
+Use `hdfs://namenode:8020` from services in this Compose network. From a host process, use WebHDFS through port `19870`, or run the HDFS client in the NameNode container. For an existing workflow, upload source data into the existing project path:
 
 ```powershell
 docker compose cp ..\data\crop_data.csv namenode:/tmp/crop_data.csv
@@ -64,10 +64,10 @@ docker compose exec namenode hdfs dfs -ls /crop_recommendation_system
 docker compose exec resourcemanager yarn node -list
 
 # HiveServer2 can query the PostgreSQL-backed metastore.
-docker compose exec hiveserver2 beeline -u 'jdbc:hive2://localhost:10000/default' -e 'SHOW DATABASES;'
+docker compose exec hiveserver2 beeline -u 'jdbc:hive2://localhost:11000/default' -e 'SHOW DATABASES;'
 
 # Spark can read the same HDFS namespace.
-docker compose exec spark-master spark-submit --master spark://spark-master:7077 --conf spark.hadoop.fs.defaultFS=hdfs://namenode:8020 --class org.apache.spark.examples.SparkPi $SPARK_HOME/examples/jars/spark-examples_2.12-3.1.2.jar 10
+docker compose exec spark-master spark-submit --master spark://spark-master:7077 --conf spark.hadoop.fs.defaultFS=hdfs://namenode:8020 --class org.apache.spark.examples.SparkPi /opt/spark/examples/jars/spark-examples_2.12-3.1.2.jar 10
 ```
 
 Successful output includes a live DataNode, a NodeManager entry, the `default` Hive database, and a Spark `Pi is roughly` result.

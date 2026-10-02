@@ -9,13 +9,14 @@ services:
     hostname: namenode
     command: ["/bin/bash", "/opt/docker/scripts/start-hadoop.sh", "namenode"]
     ports:
-      - "9870:9870"
-      - "8020:8020"
+      - "19870:9870"
+      - "18020:8020"
     volumes:
       - namenode-data:${HDFS_NAMENODE_DIR:-/data/dfs/name}
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
       - ./scripts:/opt/docker/scripts:ro
     environment:
+      HADOOP_CONF_DIR: /tmp/hadoop-conf
       HDFS_NAMENODE_DIR: ${HDFS_NAMENODE_DIR:-/data/dfs/name}
       HDFS_REPLICATION: ${HDFS_REPLICATION:-1}
       CLUSTER_NAME: crop-recommendation
@@ -34,12 +35,13 @@ services:
       namenode:
         condition: service_healthy
     ports:
-      - "9864:9864"
+      - "19864:9864"
     volumes:
       - datanode-data:${HDFS_DATANODE_DIR:-/data/dfs/data}
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
       - ./scripts:/opt/docker/scripts:ro
     environment:
+      HADOOP_CONF_DIR: /tmp/hadoop-conf
       HDFS_DATANODE_DIR: ${HDFS_DATANODE_DIR:-/data/dfs/data}
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:9864/jmx | grep -q DataNodeInfo"]
@@ -55,6 +57,8 @@ services:
         condition: service_healthy
       datanode:
         condition: service_healthy
+    environment:
+      HADOOP_CONF_DIR: /tmp/hadoop-conf
     volumes:
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
       - ./scripts:/opt/docker/scripts:ro
@@ -67,12 +71,14 @@ services:
       namenode:
         condition: service_healthy
     ports:
-      - "8088:8088"
+      - "18088:8088"
+    environment:
+      HADOOP_CONF_DIR: /tmp/hadoop-conf
     volumes:
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
       - ./scripts:/opt/docker/scripts:ro
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8088/ws/v1/cluster/info | grep -q STARTED"]
+      test: ["CMD-SHELL", "curl -fsS http://resourcemanager:8088/ws/v1/cluster/info | grep -q STARTED"]
       interval: 10s
       timeout: 5s
       retries: 18
@@ -85,7 +91,9 @@ services:
       resourcemanager:
         condition: service_healthy
     ports:
-      - "8042:8042"
+      - "18042:8042"
+    environment:
+      HADOOP_CONF_DIR: /tmp/hadoop-conf
     volumes:
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
       - ./scripts:/opt/docker/scripts:ro
@@ -98,7 +106,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-hive}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     ports:
-      - "5432:5432"
+      - "15432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d:ro
@@ -126,16 +134,17 @@ services:
       postgres:
         condition: service_healthy
     ports:
-      - "9083:9083"
+      - "19083:9083"
     volumes:
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
       - ./config/hive:/opt/hive/conf:ro
       - ./scripts:/opt/docker/scripts:ro
     environment:
+      HADOOP_CONF_DIR: /tmp/hadoop-conf
       HIVE_METASTORE_DB_PASSWORD: ${HIVE_METASTORE_DB_PASSWORD:?Set HIVE_METASTORE_DB_PASSWORD in .env}
       HIVE_METASTORE_DB_NAME: ${POSTGRES_DB:-metastore}
       HIVE_METASTORE_DB_USER: ${POSTGRES_USER:-hive}
-      HADOOP_USER_NAME: hadoop
+      HADOOP_USER_NAME: hive
     healthcheck:
       test: ["CMD-SHELL", "nc -z localhost 9083"]
       interval: 5s
@@ -150,17 +159,24 @@ services:
       hive-metastore:
         condition: service_healthy
     ports:
-      - "10000:10000"
-      - "10002:10002"
+      - "11000:10000"
+      - "11002:10002"
     volumes:
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
       - ./config/hive:/opt/hive/conf:ro
       - ./scripts:/opt/docker/scripts:ro
     environment:
+      HADOOP_CONF_DIR: /tmp/hadoop-conf
       HIVE_METASTORE_DB_PASSWORD: ${HIVE_METASTORE_DB_PASSWORD:?Set HIVE_METASTORE_DB_PASSWORD in .env}
       HIVE_METASTORE_DB_NAME: ${POSTGRES_DB:-metastore}
       HIVE_METASTORE_DB_USER: ${POSTGRES_USER:-hive}
-      HADOOP_USER_NAME: hadoop
+      HADOOP_USER_NAME: hive
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 10000"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 90s
 
   spark-master:
     build:
@@ -176,12 +192,20 @@ services:
       namenode:
         condition: service_healthy
     ports:
-      - "7077:7077"
-      - "8080:8080"
+      - "17077:7077"
+      - "18082:8080"
+    environment:
+      HADOOP_CONF_DIR: /tmp/hadoop-conf
     volumes:
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
       - ./config/spark:/opt/spark/conf:ro
       - ./scripts:/opt/docker/scripts:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://spark-master:8080/ >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
 
   spark-worker:
     image: crop-recommendation-spark:${SPARK_VERSION:-3.1.2}
@@ -190,16 +214,27 @@ services:
     depends_on:
       - spark-master
     ports:
-      - "8081:8081"
+      - "18081:8081"
     volumes:
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
       - ./config/spark:/opt/spark/conf:ro
       - ./scripts:/opt/docker/scripts:ro
     environment:
+      HADOOP_CONF_DIR: /tmp/hadoop-conf
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 2g
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://spark-worker:8081/ >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
 
 volumes:
   namenode-data:
   datanode-data:
   postgres-data:
+
+networks:
+  default:
+    name: crop-recommendation-default

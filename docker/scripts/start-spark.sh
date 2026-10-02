@@ -4,12 +4,15 @@ set -euo pipefail
 role="${1:?Spark role is required}"
 source "$(dirname "$0")/prepare-hadoop-conf.sh"
 prepare_hadoop_conf
+local_ip="$(hostname -I | awk '{print $1}')"
+if [[ -z "$local_ip" ]]; then echo "Could not determine container IP" >&2; exit 1; fi
+export SPARK_LOCAL_IP="$local_ip" SPARK_LOCAL_HOSTNAME="$local_ip"
 export SPARK_DIST_CLASSPATH="$(hadoop classpath)"
 
 case "$role" in
   master)
     exec "$SPARK_HOME/bin/spark-class" org.apache.spark.deploy.master.Master \
-      --host spark-master --port 7077 --webui-port 8080
+      --host "$local_ip" --port 7077 --webui-port 8080
     ;;
   worker)
     exec "$SPARK_HOME/bin/spark-class" org.apache.spark.deploy.worker.Worker \
