@@ -238,3 +238,13 @@ The application is fully functional with machine learning predictions, historica
 - No project files were changed during the Spark troubleshooting.
 - No Docker volumes or unrelated Docker stacks were touched.
 - Git working tree remains clean and up to date.
+## 2026-10-03 — Dataset Loaded into HDFS
+
+- Identified the project dataset: `dataset/Crop_recommendation.csv`.
+- Verified the dataset structure and confirmed it is the existing crop recommendation dataset used by the project.
+- Started the Big Data processing pipeline without retraining the existing ML model.
+- Successfully copied `Crop_recommendation.csv` into the NameNode container.
+- Loaded the dataset into HDFS at:
+  `/crop_recommendation_system/input/Crop_recommendation.csv`
+- Verified the file exists in HDFS with a size of approximately 145.8 KB.
+- HDFS input storage is now ready for Hive and Spark processing.
