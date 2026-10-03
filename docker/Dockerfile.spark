@@ -2,10 +2,16 @@ ARG HADOOP_VERSION=3.2.1
 FROM crop-recommendation-hadoop:${HADOOP_VERSION}
 
 USER root
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 \
+    && rm -rf /var/lib/apt/lists/*
+
 ARG SPARK_VERSION=3.1.2
 ENV SPARK_HOME=/opt/spark \
     SPARK_CONF_DIR=/opt/spark/conf \
     PATH=/opt/spark/bin:/opt/spark/sbin:$PATH
+
 
 RUN curl -fsSL "https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz" -o /tmp/spark.tgz \
     && tar -xzf /tmp/spark.tgz -C /opt \
@@ -13,5 +19,4 @@ RUN curl -fsSL "https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spa
     && rm /tmp/spark.tgz \
     && mkdir -p /opt/spark/logs /opt/spark/work \
     && chown -R hadoop:hadoop /opt/spark-${SPARK_VERSION}-bin-hadoop3.2
-
 USER hadoop
