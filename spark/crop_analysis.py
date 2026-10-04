@@ -28,4 +28,16 @@ crop_stats = df.groupBy("label").agg(
 print("Crop-wise average statistics:")
 crop_stats.show(22, truncate=False)
 
+crop_stats = crop_stats.coalesce(1)
+
+# Save crop-wise statistics to HDFS
+output_path = "hdfs://namenode:8020/crop_recommendation_system/output/crop_statistics"
+
+crop_stats.write \
+    .mode("overwrite") \
+    .option("header", "true") \
+    .csv(output_path)
+
+print("Crop statistics successfully saved to HDFS!")
+
 spark.stop()
