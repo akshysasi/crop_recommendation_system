@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import avg
 
 spark = SparkSession.builder \
     .appName("Crop Recommendation Analysis") \
@@ -8,15 +9,23 @@ spark = SparkSession.builder \
 
 print("Spark session started successfully!")
 
-# Read the cleaned crop data from Hive
+# Read cleaned crop data from Hive
 df = spark.table("default.crop_data_clean")
 
 print("Total records:", df.count())
 
-print("Schema:")
-df.printSchema()
+# Calculate crop-wise average values
+crop_stats = df.groupBy("label").agg(
+    avg("nitrogen").alias("avg_nitrogen"),
+    avg("phosphorus").alias("avg_phosphorus"),
+    avg("potassium").alias("avg_potassium"),
+    avg("temperature").alias("avg_temperature"),
+    avg("humidity").alias("avg_humidity"),
+    avg("ph").alias("avg_ph"),
+    avg("rainfall").alias("avg_rainfall")
+)
 
-print("First 10 records:")
-df.show(10)
+print("Crop-wise average statistics:")
+crop_stats.show(22, truncate=False)
 
 spark.stop()
