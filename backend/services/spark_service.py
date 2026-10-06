@@ -5,18 +5,25 @@ from pyspark.sql.functions import avg, desc
 
 # Get the absolute path to the backend folder
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-DATA_PATH = os.path.join(BASE_DIR, "data", "prediction_history.csv")
+DATA_PATH = os.environ.get("PREDICTION_DATA_PATH", os.path.join(BASE_DIR, "data", "prediction_history.csv"))
 
 
 def get_prediction_statistics():
 
     # Create Spark Session
-    spark = (
+    builder = (
         SparkSession.builder
         .appName("CropAnalytics")
-        .master("local[*]")
-        .getOrCreate()
+        .master(os.environ.get("SPARK_MASTER_URL", "local[*]"))
     )
+    if os.environ.get("SPARK_ENABLE_HIVE", "").lower() == "true":
+        builder = builder.enableHiveSupport()
+    driver_host = os.environ.get("SPARK_DRIVER_HOST")
+    if driver_host:
+        builder = builder.config("spark.driver.host", driver_host).config(
+            "spark.driver.bindAddress", "0.0.0.0"
+        )
+    spark = builder.getOrCreate()
 
     # Read prediction history
     df = (

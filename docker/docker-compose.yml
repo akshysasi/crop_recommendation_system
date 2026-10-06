@@ -219,6 +219,7 @@ services:
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
       - ./config/spark:/opt/spark/conf:ro
       - ./scripts:/opt/docker/scripts:ro
+      - ../backend/data:/app/data:ro
     environment:
       HADOOP_CONF_DIR: /tmp/hadoop-conf
       SPARK_WORKER_CORES: 2
@@ -230,6 +231,16 @@ services:
       retries: 18
       start_period: 30s
 
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    image: crop-recommendation-backend:latest
+    hostname: backend
+    restart: unless-stopped
+    depends_on:
+      spark-master:
+        condition: service_healthy
 volumes:
   namenode-data:
   datanode-data:
