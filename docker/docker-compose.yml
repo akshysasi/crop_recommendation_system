@@ -241,6 +241,20 @@ services:
     depends_on:
       spark-master:
         condition: service_healthy
+      hive-metastore:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      SPARK_MASTER_URL: spark://spark-master:7077
+      SPARK_ENABLE_HIVE: "true"
+      SPARK_DRIVER_HOST: backend
+      HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
+      PREDICTION_DATA_PATH: /app/data/prediction_history.csv
+    volumes:
+      - ../backend/data:/app/data
+      - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
+      - ./config/hive/hive-site.xml:/opt/spark/conf/hive-site.xml:ro
 volumes:
   namenode-data:
   datanode-data:
