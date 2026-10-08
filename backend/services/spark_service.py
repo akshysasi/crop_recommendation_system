@@ -33,7 +33,7 @@ def get_prediction_statistics():
     df = (
         spark.read
         .option("header", True)
-        .csv(DATA_PATH, inferSchema=True)
+        .csv(f"file://{DATA_PATH}", inferSchema=True)
     )
     total_predictions = df.count()
     most_recommended = (
