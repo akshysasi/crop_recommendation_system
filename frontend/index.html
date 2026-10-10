@@ -1,67 +1,148 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Crop Recommendation System</title>
-
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
+    <main class="container">
+        <header class="page-header">
+            <h1>Crop Recommendation System</h1>
+            <p class="subtitle">
+                Discover suitable crops using soil and weather parameters,
+                powered by machine learning and big data analytics.
+            </p>
+        </header>
 
-    <div class="container">
+        <!-- Crop prediction form -->
+        <section class="prediction-section">
+            <h2>Crop Prediction</h2>
 
-        <h1>🌾 Crop Recommendation System</h1>
+            <form class="form" id="predictionForm">
+                <label for="nitrogen">Nitrogen (N)</label>
+                <input type="number" id="nitrogen" placeholder="e.g. 90" step="any" required>
 
-        <p class="subtitle">
-            Enter the soil and weather parameters below to receive the best crop recommendation.
-        </p>
+                <label for="phosphorus">Phosphorus (P)</label>
+                <input type="number" id="phosphorus" placeholder="e.g. 42" step="any" required>
 
-        <div class="form">
+                <label for="potassium">Potassium (K)</label>
+                <input type="number" id="potassium" placeholder="e.g. 43" step="any" required>
 
-            <input type="number" id="nitrogen" placeholder="Nitrogen (N)">
+                <label for="temperature">Temperature (°C)</label>
+                <input type="number" id="temperature" placeholder="e.g. 21.5" step="any" required>
 
-            <input type="number" id="phosphorus" placeholder="Phosphorus (P)">
+                <label for="humidity">Humidity (%)</label>
+                <input type="number" id="humidity" placeholder="e.g. 82" min="0" max="100" step="any" required>
 
-            <input type="number" id="potassium" placeholder="Potassium (K)">
+                <label for="ph">pH Value</label>
+                <input type="number" id="ph" placeholder="e.g. 6.5" min="0" max="14" step="any" required>
 
-            <input type="number" id="temperature" placeholder="Temperature (°C)">
+                <label for="rainfall">Rainfall (mm)</label>
+                <input type="number" id="rainfall" placeholder="e.g. 203" min="0" step="any" required>
 
-            <input type="number" id="humidity" placeholder="Humidity (%)">
+                <div class="button-group">
+                    <button type="submit" id="predictBtn">Predict Crop</button>
+                    <button type="button" id="clearBtn">Clear</button>
+                </div>
+            </form>
 
-            <input type="number" id="ph" placeholder="pH Value">
+            <div id="result" aria-live="polite">
+                <p class="result-placeholder">
+                    Your crop recommendation will appear here.
+                </p>
+            </div>
+        </section>
 
-            <input type="number" id="rainfall" placeholder="Rainfall (mm)">
+        <!-- Big Data analytics dashboard -->
+        <section class="analytics-section" id="analytics">
+            <div class="section-heading">
+                <div>
+                    <h2>Big Data Analytics</h2>
+                    <p class="subtitle">
+                        Insights from prediction history and crop statistics
+                        processed using Spark and Hive.
+                    </p>
+                </div>
 
-            <div class="button-group">
-
-                <button id="predictBtn" onclick="predictCrop()">
-                     🌾 Predict Crop
+                <button type="button" id="refreshAnalyticsBtn">
+                    Refresh Analytics
                 </button>
-
-                <button id="clearBtn" type="button">
-                    🔄 Clear
-                </button>
-
             </div>
 
-        </div>
-
-        <div id="result">
-            <p class="result-placeholder">
-                Your crop recommendation will appear here.
+            <p id="analyticsStatus" role="status">
+                Analytics will load when the dashboard connects to the backend.
             </p>
-        </div>
 
-    </div>
+            <!-- Summary cards -->
+            <div class="analytics-summary">
+                <article class="stat-card">
+                    <h3>Total Predictions</h3>
+                    <p class="stat-value" id="totalPredictions">—</p>
+                </article>
+
+                <article class="stat-card">
+                    <h3>Most Recommended Crop</h3>
+                    <p class="stat-value" id="topCrop">—</p>
+                </article>
+
+                <article class="stat-card">
+                    <h3>Average Temperature</h3>
+                    <p class="stat-value" id="averageTemperature">—</p>
+                </article>
+
+                <article class="stat-card">
+                    <h3>Average Rainfall</h3>
+                    <p class="stat-value" id="averageRainfall">—</p>
+                </article>
+            </div>
+
+            <!-- Crop recommendation distribution -->
+            <div class="analytics-panel">
+                <h3>Prediction Distribution</h3>
+                <div id="cropDistribution">
+                    <p class="result-placeholder">
+                        Waiting for analytics data.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Crop-wise statistics from Hive -->
+            <div class="analytics-panel">
+                <h3>Crop-wise Soil and Weather Statistics</h3>
+                <p class="table-description">
+                    Average nutrient, temperature, humidity, pH and rainfall
+                    values for each crop in the dataset.
+                </p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Crop</th>
+                                <th>Nitrogen</th>
+                                <th>Phosphorus</th>
+                                <th>Potassium</th>
+                                <th>Temperature (°C)</th>
+                                <th>Humidity (%)</th>
+                                <th>pH</th>
+                                <th>Rainfall (mm)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cropStatisticsBody">
+                            <tr>
+                                <td colspan="8">Waiting for crop statistics.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <script src="script.js"></script>
-
 </body>
-
 </html>
