@@ -1,85 +1,74 @@
+
+const API_BASE_URL = "http://localhost:5000/api";
+
+// ======================================
+// Crop prediction
+// ======================================
+
 async function predictCrop() {
-
     const button = document.getElementById("predictBtn");
+    const result = document.getElementById("result");
 
-    // Disable button and start loading animation
+    const fields = [
+        "nitrogen",
+        "phosphorus",
+        "potassium",
+        "temperature",
+        "humidity",
+        "ph",
+        "rainfall"
+    ];
+
+    const inputElements = fields.map(id => document.getElementById(id));
+
+    inputElements.forEach(input => input.classList.remove("error"));
+
+    const values = inputElements.map(input => input.value.trim());
+
+    if (values.some(value => value === "" || !Number.isFinite(Number(value)))) {
+        inputElements.forEach((input, index) => {
+            if (values[index] === "" || !Number.isFinite(Number(values[index]))) {
+                input.classList.add("error");
+            }
+        });
+
+        result.textContent = "Please enter valid numbers in all fields.";
+        return;
+    }
+
+    const [
+        nitrogen,
+        phosphorus,
+        potassium,
+        temperature,
+        humidity,
+        ph,
+        rainfall
+    ] = values.map(Number);
+
+    if (
+        nitrogen < 0 ||
+        phosphorus < 0 ||
+        potassium < 0 ||
+        temperature < -20 ||
+        humidity < 0 ||
+        humidity > 100 ||
+        ph < 0 ||
+        ph > 14 ||
+        rainfall < 0
+    ) {
+        result.textContent = "Please enter valid values.";
+        return;
+    }
+
     button.disabled = true;
-
-    let dots = 0;
-
-    button.innerHTML = "🌾 Predicting";
-
-    const loadingAnimation = setInterval(() => {
-        dots = (dots + 1) % 4;
-        button.innerHTML = "🌾 Predicting" + ".".repeat(dots);
-    }, 350);
+    button.textContent = "Predicting...";
 
     try {
-
-        // Get values
-        const nitrogen = parseFloat(document.getElementById("nitrogen").value);
-        const phosphorus = parseFloat(document.getElementById("phosphorus").value);
-        const potassium = parseFloat(document.getElementById("potassium").value);
-        const temperature = parseFloat(document.getElementById("temperature").value);
-        const humidity = parseFloat(document.getElementById("humidity").value);
-        const ph = parseFloat(document.getElementById("ph").value);
-        const rainfall = parseFloat(document.getElementById("rainfall").value);
-
-        const values = [
-            nitrogen,
-            phosphorus,
-            potassium,
-            temperature,
-            humidity,
-            ph,
-            rainfall
-        ];
-
-        const inputElements = document.querySelectorAll(".form input");
-
-        // Remove previous error highlights
-        inputElements.forEach(input => input.classList.remove("error"));
-
-        // Empty field validation
-        if (values.some(value => isNaN(value))) {
-
-            values.forEach((value, index) => {
-                if (isNaN(value)) {
-                    inputElements[index].classList.add("error");
-                }
-            });
-
-            throw new Error("Please fill in all fields.");
-
-        }
-
-        // Range validation
-        if (
-            nitrogen < 0 ||
-            phosphorus < 0 ||
-            potassium < 0 ||
-            temperature < -20 ||
-            humidity < 0 ||
-            humidity > 100 ||
-            ph < 0 ||
-            ph > 14 ||
-            rainfall < 0
-        ) {
-
-            throw new Error("Please enter valid values.");
-
-        }
-
-        const response = await fetch("http://127.0.0.1:5000/api/predict", {
-
+        const response = await fetch(`${API_BASE_URL}/predict`, {
             method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-
                 nitrogen,
                 phosphorus,
                 potassium,
@@ -87,148 +76,196 @@ async function predictCrop() {
                 humidity,
                 ph,
                 rainfall
-
             })
-
         });
-
-        if (!response.ok) {
-            throw new Error("Server returned an error.");
-        }
 
         const data = await response.json();
 
-        console.log(data);
+        if (!response.ok) {
+            throw new Error(data.error || "Prediction request failed.");
+        }
 
-        clearInterval(loadingAnimation);
+        const card = document.createElement("div");
+        card.className = "result-card";
 
-        button.disabled = false;
-        button.innerHTML = "🌾 Predict Crop";
+        const status = document.createElement("p");
+        status.className = "success";
+        status.textContent = "Prediction Complete";
 
-        document.getElementById("result").innerHTML = `
+        const heading = document.createElement("h3");
+        heading.textContent = "Recommended Crop";
 
-            <div class="result-card">
+        const crop = document.createElement("h1");
+        crop.textContent = data.recommended_crop;
 
-                <div class="success">
-                    ✅ Prediction Complete
-                </div>
+        card.append(status, heading, crop);
+        result.replaceChildren(card);
 
-                <h3>Recommended Crop</h3>
-
-                <h1>${data.recommended_crop}</h1>
-
-            </div>
-
-        `;
+        // Refresh analytics after a prediction is recorded.
+        await loadAnalytics();
 
     } catch (error) {
-
-        clearInterval(loadingAnimation);
-
+        result.textContent = error.message || "Unable to connect to the backend.";
+        console.error("Prediction error:", error);
+    } finally {
         button.disabled = false;
-        button.innerHTML = "🌾 Predict Crop";
-
-        console.error(error);
-
-        document.getElementById("result").innerHTML =
-            `<span style="color:red;">${error.message}</span>`;
-
+        button.textContent = "Predict Crop";
     }
-
 }
 
 
 // ======================================
-// Keyboard Navigation
+// Analytics dashboard
 // ======================================
 
-const inputs = document.querySelectorAll(".form input");
+function displayValue(value, digits = 2) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number.toFixed(digits) : "—";
+}
 
-inputs.forEach((input, index) => {
+function addTextCell(row, value) {
+    const cell = document.createElement("td");
+    cell.textContent = value ?? "—";
+    row.appendChild(cell);
+    return cell;
+}
 
-    input.addEventListener("keydown", function (e) {
+function renderCropDistribution(distribution) {
+    const container = document.getElementById("cropDistribution");
+    container.replaceChildren();
 
-        if (e.key === "Enter") {
+    const entries = Object.entries(distribution || {})
+        .sort((a, b) => b[1] - a[1]);
 
-            e.preventDefault();
+    if (entries.length === 0) {
+        container.textContent = "No prediction history is available yet.";
+        return;
+    }
 
-            if (index < inputs.length - 1) {
+    const maxCount = Math.max(...entries.map(([, count]) => Number(count) || 0), 1);
 
-                inputs[index + 1].focus();
-                inputs[index + 1].select();
+    entries.forEach(([crop, count]) => {
+        const item = document.createElement("div");
+        item.className = "distribution-item";
 
-            } else {
+        const heading = document.createElement("div");
+        heading.className = "distribution-heading";
 
-                predictCrop();
+        const name = document.createElement("span");
+        name.textContent = crop;
 
-            }
+        const total = document.createElement("span");
+        total.textContent = String(count);
 
-        }
+        heading.append(name, total);
 
-        if (e.key === "ArrowDown") {
+        const track = document.createElement("div");
+        track.className = "distribution-track";
 
-            e.preventDefault();
+        const bar = document.createElement("div");
+        bar.className = "distribution-bar";
+        bar.style.width = `${Math.max(0, Math.min(100, (Number(count) / maxCount) * 100))}%`;
 
-            if (index < inputs.length - 1) {
-
-                inputs[index + 1].focus();
-                inputs[index + 1].select();
-
-            }
-
-        }
-
-        if (e.key === "ArrowUp") {
-
-            e.preventDefault();
-
-            if (index > 0) {
-
-                inputs[index - 1].focus();
-                inputs[index - 1].select();
-
-            }
-
-        }
-
+        track.appendChild(bar);
+        item.append(heading, track);
+        container.appendChild(item);
     });
+}
 
+function renderCropStatistics(statistics) {
+    const tbody = document.getElementById("cropStatisticsBody");
+    tbody.replaceChildren();
+
+    if (!Array.isArray(statistics) || statistics.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 8;
+        cell.textContent = "No crop statistics are available.";
+        row.appendChild(cell);
+        tbody.appendChild(row);
+        return;
+    }
+
+    statistics.forEach(crop => {
+        const row = document.createElement("tr");
+
+        addTextCell(row, crop.label);
+        addTextCell(row, displayValue(crop.avg_nitrogen));
+        addTextCell(row, displayValue(crop.avg_phosphorus));
+        addTextCell(row, displayValue(crop.avg_potassium));
+        addTextCell(row, displayValue(crop.avg_temperature));
+        addTextCell(row, displayValue(crop.avg_humidity));
+        addTextCell(row, displayValue(crop.avg_ph));
+        addTextCell(row, displayValue(crop.avg_rainfall));
+
+        tbody.appendChild(row);
+    });
+}
+
+async function loadAnalytics() {
+    const status = document.getElementById("analyticsStatus");
+    const refreshButton = document.getElementById("refreshAnalyticsBtn");
+
+    status.textContent = "Loading analytics...";
+    refreshButton.disabled = true;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/analytics`);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Analytics request failed.");
+        }
+
+        document.getElementById("totalPredictions").textContent =
+            data.total_predictions ?? 0;
+
+        document.getElementById("topCrop").textContent =
+            data.most_recommended_crop ?? "—";
+
+        document.getElementById("averageTemperature").textContent =
+            `${displayValue(data.average_temperature)} °C`;
+
+        document.getElementById("averageRainfall").textContent =
+            `${displayValue(data.average_rainfall)} mm`;
+
+        renderCropDistribution(data.crop_distribution);
+        renderCropStatistics(data.crop_statistics);
+
+        status.textContent = "Analytics updated successfully.";
+    } catch (error) {
+        status.textContent =
+            `Could not load analytics: ${error.message}. Check that the Docker backend is running.`;
+
+        console.error("Analytics error:", error);
+    } finally {
+        refreshButton.disabled = false;
+    }
+}
+
+
+// ======================================
+// Form and buttons
+// ======================================
+
+document.getElementById("predictionForm").addEventListener("submit", event => {
+    event.preventDefault();
+    predictCrop();
 });
-
-
-// ======================================
-// Auto Focus First Field
-// ======================================
-
-window.addEventListener("DOMContentLoaded", () => {
-
-    const firstInput = document.getElementById("nitrogen");
-
-    firstInput.focus();
-    firstInput.select();
-
-});
-
-
-// ======================================
-// Clear Button
-// ======================================
 
 document.getElementById("clearBtn").addEventListener("click", () => {
+    document.getElementById("predictionForm").reset();
 
     document.querySelectorAll(".form input").forEach(input => {
-
-        input.value = "";
         input.classList.remove("error");
-
     });
 
-    document.getElementById("result").innerHTML =
-        `<p class="result-placeholder">Your crop recommendation will appear here.</p>`;
+    const result = document.getElementById("result");
+    result.textContent = "Your crop recommendation will appear here.";
 
-    const firstInput = document.getElementById("nitrogen");
-
-    firstInput.focus();
-    firstInput.select();
-
+    document.getElementById("nitrogen").focus();
 });
+
+document.getElementById("refreshAnalyticsBtn").addEventListener("click", loadAnalytics);
+
+document.addEventListener("DOMContentLoaded", loadAnalytics);
