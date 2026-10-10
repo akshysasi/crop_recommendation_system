@@ -248,3 +248,47 @@ The application is fully functional with machine learning predictions, historica
   `/crop_recommendation_system/input/Crop_recommendation.csv`
 - Verified the file exists in HDFS with a size of approximately 145.8 KB.
 - HDFS input storage is now ready for Hive and Spark processing.
+# Project Development Journal
+**Date:** 10 October 2026  
+**Project:** Crop Recommendation System  
+**Focus:** Frontend dashboard integration and Docker/Spark troubleshooting
+
+## 1. Work Completed
+
+### Frontend Dashboard
+- Updated `frontend/index.html` to include the crop prediction form and analytics dashboard.
+- Updated `frontend/script.js` to connect the frontend to the Flask backend using the `/api/predict` and `/api/analytics` endpoints.
+- Added functionality to display prediction results, total predictions, the most recommended crop, average temperature, average rainfall, crop distribution, and crop statistics.
+- Updated `frontend/style.css` to provide a responsive dashboard layout with summary cards, distribution bars, and a crop statistics table.
+- The frontend files were committed and pushed to GitHub in separate commits.
+
+### Docker and Spark Troubleshooting
+- Checked the Docker containers after the analytics endpoint started returning an Internal Server Error.
+- Found that the project’s Spark master and worker containers had stopped with exit code `255`.
+- Identified a DNS resolution failure when the backend attempted to resolve the hostname `spark-master`.
+- Started the project services using `docker compose up -d`.
+- Confirmed that Docker services appeared healthy after starting them.
+
+## 2. Testing and Results
+
+- The frontend is accessible at `http://localhost:5500/`.
+- The Flask backend runs on `http://localhost:5000/`.
+- The analytics endpoint, `/api/analytics`, continues to return an HTTP 500 Internal Server Error despite restarting the project services.
+- Further backend log inspection is required to identify the remaining cause.
+
+## 3. Current Status
+
+**Completed:** Frontend dashboard integration and recovery of the stopped Docker services.
+
+**Pending:** Fixing the analytics endpoint and verifying that Spark, Hive, and prediction-history analytics work correctly through the dashboard.
+
+## 4. Next Steps
+
+1. Inspect the latest logs from `crop-recommendation-backend-1`.
+2. Identify the exact exception causing `/api/analytics` to fail.
+3. Verify Spark master connectivity and Hive table access from the backend.
+4. Test the analytics endpoint directly before testing it through the frontend.
+5. Verify that predictions and analytics both work in the dashboard.
+6. Confirm the final changes and update the GitHub repository if any new code changes are required.
+
+**Important:** No deletion of Docker volumes, HDFS data, or existing trained models was performed as part of today's troubleshooting.
