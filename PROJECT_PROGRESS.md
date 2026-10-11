@@ -292,3 +292,31 @@ The application is fully functional with machine learning predictions, historica
 6. Confirm the final changes and update the GitHub repository if any new code changes are required.
 
 **Important:** No deletion of Docker volumes, HDFS data, or existing trained models was performed as part of today's troubleshooting.
+## Progress Update — 11 October 2026
+
+### Work Completed
+
+- **Restored Docker services:** Started the project stack using `docker compose up -d` after the Spark master and worker containers had stopped.
+- **Verified Hive Metastore:** Inspected container logs and health checks. The Metastore subsequently reported a healthy status.
+- **Restored analytics API functionality:** Confirmed that the Flask `/api/analytics` endpoint successfully returned JSON data.
+- **Verified frontend resources:** Confirmed that `script.js` and `style.css` loaded successfully through the browser's Network tab.
+- **Restored dashboard analytics display:** Confirmed that analytics data appeared in the frontend dashboard.
+- **Tested crop prediction:** Submitted a new prediction using different input values, and the model recommended cotton.
+- **Verified analytics updates:** Confirmed that the analytics dashboard updated after the cotton prediction.
+
+### Issues Encountered and Resolution
+
+The Spark master and worker containers had stopped with exit code 255, and the backend initially failed to resolve the `spark-master` hostname. The project services were subsequently started again. Hive Metastore health was verified, and the analytics endpoint later returned data successfully.
+
+### Current Status
+
+- Crop prediction: Working and tested with cotton.
+- Analytics API: Returning JSON successfully.
+- Dashboard analytics: Displaying data and updating after a new prediction.
+- GitHub: A checkpoint was committed and pushed with the message `feat: verify crop prediction and analytics dashboard`.
+
+### Next Steps
+
+1. Investigate the analytics request latency, previously observed at approximately 18 seconds.
+2. Identify opportunities to improve analytics performance without breaking Spark and Hive integration.
+3. Retest predictions and analytics after any performance changes.
