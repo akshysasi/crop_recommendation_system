@@ -1,13 +1,13 @@
 # 🌾 AI-Powered Crop Recommendation System
 ## Project Progress Tracker
 
-**Last Updated:** 14 September 2026
+**Last Updated:** 12 October 2026
 
 ---
 
 # Overall Progress
 
-**Project Completion:** **~92%**
+**Current checkpoint:** Historical project entries record the Hadoop/Hive/Spark pipeline and Flask analytics as working. The live final system check remains unverified as of 12 October 2026 because Docker Desktop was inaccessible from the check environment. See the dated entry below.
 
 ---
 
@@ -201,17 +201,43 @@ Current findings:
 | Prediction Logging | ✅ Complete |
 | Apache Spark | ✅ Complete |
 | Spark Analytics | ✅ Complete |
-| Apache Hive | 🚧 In Progress |
-| Documentation |  Complete |
+| Apache Hive | ✅ Pipeline verification recorded 2 October 2026; not rechecked today |
+| Documentation | ✅ Refreshed 12 October 2026 |
+| Live final system check | ⏳ Not verified in this environment |
 | Deployment | ⏳ Pending |
 
 ---
 
 ## 🎯 Overall Progress
 
-**≈ 92% Complete**
+**Completion percentage:** Not recalculated; the live final system check is outstanding.
 
 The application is fully functional with machine learning predictions, historical logging, and Apache Spark analytics. The remaining major task is completing the Apache Hive integration and applying final project polish.
+
+## 2026-10-12 — Documentation Refresh and Final Check Attempt
+
+### Documentation reviewed
+
+- Reconciled this progress log with the later project entries dated 2, 3, 10, and 11 October and the checked-in Compose, backend, SQL, Spark, and frontend files.
+- Replaced the stale top-level README with the current architecture, prerequisites, startup and safe shutdown instructions, API routes, data flows, limitations, project structure, and a reproducible final-check procedure.
+- The earlier progress entries are historical records. Their reported service checks were not independently repeated during this documentation update.
+
+### Final system check attempt
+
+- Inspected `docker/docker-compose.yml`, the Flask route handlers and services, frontend assets, model files, prediction-history file, and the documented SQL/Spark pipeline.
+- Attempted to inspect the project Compose stack. Docker returned a permission-denied error for the Docker Desktop Linux engine named pipe, so container state and logs could not be read.
+- Checked host listeners for ports 5000 (backend), 5500 (frontend), 19870 (NameNode), 18088 (YARN), and 18082 (Spark Master). None were listening in this session.
+- Therefore `/api/health`, `/api/version`, `/api/analytics`, frontend asset serving, and environment lookups could not be verified against running services today. No containers were started or restarted.
+- Did not call `POST /api/predict`, so this check did not append to prediction history. Did not train the model, remove data or volumes, format HDFS, or interact with the unrelated legacy Docker stack.
+
+### Findings and remaining check
+
+- `GET /api/weather/<location>` is marked temporary in the code. It passes a location string to a weather function whose parameters are latitude and longitude, so it is not a valid smoke-test route as currently implemented.
+- `GET /api/environment?lat=...&lon=...` combines Open-Meteo weather with fixed placeholder soil values. A successful live response depends on backend availability and external network access.
+- To complete the live final system test, start Docker Desktop and the project's stack only when ready, then run the read-only smoke-test commands under **Final system check** in `README.md` from the `docker/` directory. No service restart was authorized or performed during this check.
+- Git status could not be obtained: Git repeatedly reported that the operation must be run in a work tree, despite the repository metadata identifying `main`. The exact cleanliness of the working tree is therefore unverified.
+
+**Status as of 12 October 2026:** documentation refreshed; live system test **not verified in this environment** because Docker access and expected local service listeners were unavailable. Do not mark the final test complete until the listed checks pass against the running project stack.
 
 ## 2026-10-02 — Big Data Stack Verification & Spark Troubleshooting
 
